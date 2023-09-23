@@ -1,11 +1,18 @@
 import { Scene } from 'phaser'
 import Hub from '../objects/Hub'
+import { COLORS } from '../util/color'
+import IntroScene from './Intro'
 
+/**
+ *  The Main Scene is always active and includes our global game state (probably)
+ *  */
 export default class MainScene extends Scene {
+  static key = 'MainScene'
+
   mainHub!: Hub
 
   constructor() {
-    super({ key: 'MainScene' })
+    super({ key: MainScene.key })
   }
 
   preload() {
@@ -18,10 +25,9 @@ export default class MainScene extends Scene {
       id: 'main',
       x: this.cameras.main.centerX,
       y: this.cameras.main.centerY,
-      fillColor: 0x00ff00,
-    })
-
-    this.mainHub.create()
+      fillColor: COLORS.DarkGreen,
+      strokeColor: COLORS.LightGreen,
+    }).create()
   }
 
   update() {

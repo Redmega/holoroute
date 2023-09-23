@@ -13,13 +13,12 @@ interface HubOptions {
   origin?: number
 }
 
-export default class Hub {
+export default class Hub extends GameObjects.Container {
   private options: HubOptions
-  protected scene: Scene
-  protected graphic?: GameObjects.Rectangle
+  protected graphic!: GameObjects.Rectangle
 
   constructor(scene: Scene, options: HubOptions) {
-    this.scene = scene
+    super(scene, options.x, options.y)
     this.options = options
   }
 
@@ -29,8 +28,6 @@ export default class Hub {
 
   create() {
     const {
-      x,
-      y,
       height,
       width,
       fillColor,
@@ -40,9 +37,10 @@ export default class Hub {
       origin = 0.5,
     } = this.options
     this.graphic = this.scene.add
-      .rectangle(x, y, width, height, fillColor, fillAlpha)
+      .rectangle(this.x, this.y, width, height, fillColor, fillAlpha)
       .setStrokeStyle(4, strokeColor, strokeAlpha)
       .setOrigin(origin)
+    return this
   }
 
   update() {
