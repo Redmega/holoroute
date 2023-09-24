@@ -14,15 +14,22 @@ const game = new Game({
   scene: [MainScene, IntroScene],
 })
 
+// whitelist of keys to store in localStorage
+const keyWhitelist = ['intro:done']
+
 // Load data from localStorage
 for (let i = 0; i < localStorage.length; i++) {
   const key = localStorage.key(i)
   if (key) game.registry.set(key, JSON.parse(localStorage.getItem(key)!))
 }
 
+if (!game.registry.get('intro:done')) {
+  game.scene.start(IntroScene.key)
+}
+
 // Setup listeners that persist data to localStorage
 const onChangeData = (_: typeof game, key: string, value: any) => {
-  localStorage.setItem(key, JSON.stringify(value))
+  if (keyWhitelist.includes(key)) localStorage.setItem(key, JSON.stringify(value))
 }
 
 game.registry.events.on('setdata', onChangeData)

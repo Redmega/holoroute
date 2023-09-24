@@ -5,6 +5,9 @@ import { wait } from '../util/time'
 import { RECT_PADDING, RECT_STROKE } from '../util/size'
 import Button from '../objects/Button'
 
+/**
+ * The Intro Scene is active in the beginning of the game. Once the user presses the play button, it is skipped from then on.
+ */
 export default class IntroScene extends Scene {
   static key = 'IntroScene'
 
@@ -12,28 +15,22 @@ export default class IntroScene extends Scene {
   button!: Button
 
   constructor() {
-    super({ key: IntroScene.key, active: true })
+    super({ key: IntroScene.key })
   }
 
   create() {
-    // If we've done the intro (user has pressed "play") don't try to load this scene
-    if (this.registry.get('intro:done')) {
-      this.scene.remove(IntroScene.key)
-      return
-    }
-
     // get reference to main camera
     const camera = this.scene.get(MainScene.key).cameras.main
 
     // generate background box for our "terminal"
     const background = this.add
       .rectangle(
-        camera.x + RECT_STROKE,
-        camera.height / 2 - RECT_STROKE,
+        camera.x + RECT_STROKE - RECT_STROKE / 2,
+        camera.height / 2 - RECT_STROKE / 2,
         camera.width - RECT_STROKE,
         camera.height / 2,
         COLORS.Grey,
-        0.9
+        0.5
       )
       .setStrokeStyle(RECT_STROKE, COLORS.DarkGreen)
       .setOrigin(0)
@@ -45,7 +42,7 @@ export default class IntroScene extends Scene {
     })
 
     // play our opening sequence
-    this.openingSequence(true).then(() => {
+    this.openingSequence(false).then(() => {
       this.button = new Button(this, {
         x: camera.width / 2,
         y: this.text.getBounds().bottom + RECT_PADDING * 2,
